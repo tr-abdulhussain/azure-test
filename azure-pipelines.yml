@@ -6,6 +6,10 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  IMAGE_TAG: $(Build.SourceVersion)
+  IMAGE_NAME: 'samples/test'
+
 steps:
   - task: AzureContainerApps@1
     inputs:
@@ -14,3 +18,4 @@ steps:
       acrName: 'abdultest20oct2025'
       containerAppName: 'abdultestca'
       resourceGroup: 'abdultestRG'
+      containerImage: '$(IMAGE_NAME):$(IMAGE_TAG)'
