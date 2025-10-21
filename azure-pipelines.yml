@@ -11,9 +11,7 @@ variables:
   IMAGE_NAME: 'samples/test'
 
 steps:
-  - script: |
-    SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c1-9)
-    echo "##vso[task.setvariable variable=SHORT_SHA]$SHORT_SHA"
+  - script: SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c1-9); echo "##vso[task.setvariable variable=SHORT_SHA]$SHORT_SHA"
     displayName: 'Set short Git commit hash'
 
   - task: AzureContainerApps@1
