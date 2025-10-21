@@ -1,42 +1,16 @@
-# Docker
-# Build and push an image to Azure Container Registry
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+trigger:
+  branches:
+    include:
+      - main
 
 pool:
-  name: abdultest08oct2025
+  vmImage: ubuntu-latest
 
-trigger:
-- master
-
-resources:
-- repo: self
-
-variables:
-  # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '2df28a03-bcfb-45ee-bc40-5cf2ba055430'
-  imageRepository: 'trabdulhussainazuretest'
-  containerRegistry: 'abdultest08oct2025.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
-  tag: '$(Build.BuildId)'
-
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
-
-stages:
-- stage: Build
-  displayName: Build and push stage
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - task: Docker@2
-      displayName: Build and push an image to container registry
-      inputs:
-        command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
-        containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+steps:
+  - task: AzureContainerApps@1
+    inputs:
+      appSourcePath: '$(Build.SourcesDirectory)'
+      azureSubscription: 'abdul-test-service-connection'
+      acrName: 'abdultest20oct2025'
+      containerAppName: 'abdultestca'
+      resourceGroup: 'abdultestRG'
