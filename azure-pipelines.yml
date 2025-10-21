@@ -11,6 +11,9 @@ variables:
   IMAGE_NAME: 'samples/test'
 
 steps:
+  - script: echo "##vso[task.setvariable variable=SHORT_SHA]$(Build.SourceVersion:0:9)"
+    displayName: 'Set short Git commit hash'
+
   - task: AzureContainerApps@1
     inputs:
       appSourcePath: '$(Build.SourcesDirectory)'
@@ -18,4 +21,6 @@ steps:
       acrName: 'abdultest20oct2025'
       containerAppName: 'abdultestca'
       resourceGroup: 'abdultestRG'
-      containerImage: '$(IMAGE_NAME):$(IMAGE_TAG)'
+      imageToBuild: 'samples/test:$(SHORT_SHA)'
+      imageToDeploy: 'samples/test:$(SHORT_SHA)'
+      dockerfilePath: 'Dockerfile'
